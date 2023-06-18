@@ -58,8 +58,7 @@ const getUserByEmail = async (email) => {
  */
 
 const createUser = async (data) => {
-  if (await User.isEmailTaken(data.email).length) {
-    // // return res.send(httpStatus.NOT_ACCEPTABLE).json({message: "Email already taken"});
+  if (await User.isEmailTaken(data.email)) {
     throw new ApiError(httpStatus.OK, "Email already taken");
   }
   if (!data.email) {
@@ -77,7 +76,6 @@ const createUser = async (data) => {
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(data.password, salt);
   const user = await User.create({ ...data, password: hashedPassword });
-  // return {_id:user._id,email:user.email,name:user.name,walletMoney:parseInt(user.walletMoney)};
   return user;
 };
 

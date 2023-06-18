@@ -62,8 +62,8 @@ const userSchema = mongoose.Schema(
  * @returns {Promise<boolean>}
  */
 userSchema.statics.isEmailTaken = async function (email) {
-      const result = await User.find({email:email}).catch(error => console.log(error))
-      return result
+      const _user = await User.find({email:email}).catch(error => console.log(error))
+      return _user.length ? true : false
 };
 
 
@@ -84,8 +84,10 @@ userSchema.pre('save', function(next){
   })
 })
 
-userSchema.methods.isPasswordMatch = function(password){
-  return bcrypt.compare(password,this.password)
+userSchema.methods.isPasswordMatch = async function(password){
+  const result = await bcrypt.compare(password,this.password)
+  console.log(result,"[result]")
+  return result
 }
 
 

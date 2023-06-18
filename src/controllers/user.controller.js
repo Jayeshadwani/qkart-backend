@@ -54,10 +54,6 @@ const getUser = catchAsync(async (req, res) => {
   else return res.json({message:`No user found with ${userId} id`})
 });
 
-// const verifyToken = () => {
-
-// }
-
 
 module.exports = {
   getUser,

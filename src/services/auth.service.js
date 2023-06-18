@@ -15,14 +15,14 @@ const { User } = require("../models");
  * @param {string} password
  * @returns {Promise<User>}
  */
-const loginUserWithEmailAndPassword = async (email, password) => {
-  const _user = await userService.getUserByEmail(email)  
-  console.log(_user,"1")
-  console.log(!(await _user.isPasswordMatch(password)),"2")
-  
-  if(!_user || !(await _user.isPasswordMatch(password))) throw new ApiError(httpStatus.UNAUTHORIZED,"Incorrect email or password")
-  console.log(_user)
-  return _user
+const loginUserWithEmailAndPassword = async (email,password) => {
+  const _user = await userService.getUserByEmail(email) || {}
+  if(Object.keys(_user).length){
+    const isPasswordMatch = await _user.isPasswordMatch(password)
+    if(!isPasswordMatch) throw new ApiError(httpStatus.UNAUTHORIZED,"Incorrect email or password")
+    return _user
+  }
+  else throw new ApiError(httpStatus.UNAUTHORIZED,"Incorrect email or password")
 };
 
 module.exports = {

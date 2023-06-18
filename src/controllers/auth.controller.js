@@ -55,7 +55,7 @@ const register = catchAsync(async (req, res) => {
   };
 
   // Return response
- res.status(201).json(response);
+ res.status(httpStatus.CREATED).json(response);
 });
 
 /**
@@ -92,9 +92,9 @@ const login = catchAsync(async (req, res) => {
   
   let _token = null
   
-  const _user = authService.loginUserWithEmailAndPassword(email,password)
+  const _user = await authService.loginUserWithEmailAndPassword(email,password)
   
-  _token = tokenService.generateAuthTokens(_user)
+  _token = await tokenService.generateAuthTokens(_user)
   
   const result = {
     user : _user,

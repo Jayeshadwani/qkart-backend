@@ -24,4 +24,5 @@ Middlewares
 router.get("/:userId",auth,validate(userValidation.getUser),getUser)
 
 
+
 module.exports = router;
