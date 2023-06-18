@@ -12,7 +12,6 @@ const { User } = require("../models");
 const jwtOptions = {
   secretOrKey: config.jwt.secret,
   jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
-  
 };
 
 // TODO: CRIO_TASK_MODULE_AUTH - Implement verify callback for passport strategy to find the user whose token is passed

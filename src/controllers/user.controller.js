@@ -44,6 +44,7 @@ const { getUserById } = require("../services/user.service");
  */
 const getUser = catchAsync(async (req, res) => {
   const {userId}= req.params
+  if(req.user._id != userId) return res.status(403).json({message:"Bad request"})
   const user = await getUserById(userId)
   
   if(user) {
