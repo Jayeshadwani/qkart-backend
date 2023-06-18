@@ -31,8 +31,8 @@ const auth = async (req, res, next) => {
       verifyCallback(req, resolve, reject)
     )(req, res, next);
   })
-    .then(() => next())
-    .catch((err) => next(err));
+  .then((req, res, next) => next())
+  .catch((err) => next(err));
 };
 
 module.exports = auth;
