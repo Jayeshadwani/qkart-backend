@@ -37,15 +37,25 @@ const { getUserById } = require("../services/user.service");
  * HTTP 404 - If user entity not found in DB
  * 
  * @returns {User | {address: String}}
- *
+ * userID 1 -> token1 -> access
+ * userID 2 -> token2 -> access
+ * userID1 -> token2 -> no-access
+ * 
  */
 const getUser = catchAsync(async (req, res) => {
   const {userId}= req.params
   const user = await getUserById(userId)
-  console.log(user,"from user.controller")
-  if(user) return res.json(user)
+  
+  if(user) {
+    return res.json(user)
+  }
+
   else return res.json({message:`No user found with ${userId} id`})
 });
+
+// const verifyToken = () => {
+
+// }
 
 
 module.exports = {

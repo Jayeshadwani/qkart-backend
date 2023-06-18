@@ -10,13 +10,13 @@ const bcrypt = require("bcryptjs");
  * @param {String} id
  * @returns {Promise<User>}
  */
-const getUserById = async (id) => { 
-    const result = await User.findById(id).catch((error)=>{
-        console.log(error)
-    })
+const getUserById = async (id) => {
+  const result = await User.findById(id).catch(() => {
+    throw new ApiError(httpStatus.NOT_FOUND, `No user exists with id ${id}`);
+  });
 
-    return result
-} 
+  return result;
+};
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserByEmail(email)
 /**
@@ -27,13 +27,12 @@ const getUserById = async (id) => {
  */
 
 const getUserByEmail = async (email) => {
-    const result = await User.findOne({email:email}).catch((error) => {
-        console.log(error)
-        return error
-    })
+  const result = await User.findOne({ email: email }).catch(() => {
+    throw new ApiError(httpStatus.NOT_FOUND, `No user exists with id ${id}`);
+  });
 
-    return result
-}
+  return result;
+};
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement createUser(user)
 /**
@@ -58,23 +57,28 @@ const getUserByEmail = async (email) => {
  * 200 status code on duplicate email - https://stackoverflow.com/a/53144807
  */
 
-const createUser = async (user) => {
-    const isTaken = await User.isEmailTaken(user.email);
-    //isTaken = true -> do not create an account
-    // else create One
-    
-    if(!isTaken){
-        const result = await User.create(user,(error,user)=>{
-            if(error) return error
-            user.save()
-            return user
-        })
-        return result
-    }
-    else{
-        throw new ApiError(httpStatus.OK,"Email already taken")
-    }
-}
+const createUser = async (data) => {
+  if (await User.isEmailTaken(data.email).length) {
+    // // return res.send(httpStatus.NOT_ACCEPTABLE).json({message: "Email already taken"});
+    throw new ApiError(httpStatus.OK, "Email already taken");
+  }
+  if (!data.email) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Email is not allowed to be empty"
+    );
+  }
+  if (!data.name) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Name field is required");
+  }
+  if (!data.password) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Password field is required");
+  }
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(data.password, salt);
+  const user = await User.create({ ...data, password: hashedPassword });
+  // return {_id:user._id,email:user.email,name:user.name,walletMoney:parseInt(user.walletMoney)};
+  return user;
+};
 
-
-module.exports = {getUserById,getUserByEmail,createUser}
+module.exports = { getUserById, getUserByEmail, createUser };
