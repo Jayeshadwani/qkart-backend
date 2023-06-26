@@ -1,7 +1,5 @@
 const { userOne } = require("../fixtures/user.fixture");
 const { tokenService } = require("../../src/services");
-const { generateToken } = require("../../src/services/token.service");
-const { config } = require("dotenv").config();
 
 describe("User test", () => {
   describe("Generate auth tokens", () => {

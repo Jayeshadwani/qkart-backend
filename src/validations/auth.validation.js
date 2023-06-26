@@ -2,6 +2,8 @@ const Joi = require("joi");
 const validation = require("./custom.validation");
 
 // TODO: CRIO_TASK_MODULE_AUTH - Define request validation schema for user registration
+const { password } = require("./custom.validation");
+
 /**
  * Check request *body* for fields (all are *required*)
  * - "email" : string and satisyfing email structure
@@ -15,10 +17,6 @@ const register = {
       name : Joi.string().required()
     })
   }
-
-    
- 
-
 /**
  * Check request *body* for fields (all are *required*)
  * - "email" : string and satisyfing email structure

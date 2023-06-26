@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// NOTE - "validator" external library and not the custom middleware at src/middlewares/validate.js
+// NOTE - "validator" external library and not the custom middleware at src/middlewares/.js
 const validator = require("validator");
 const bcrypt = require("bcryptjs")
 const config = require("../config/config");
@@ -62,32 +62,28 @@ const userSchema = mongoose.Schema(
  * @returns {Promise<boolean>}
  */
 userSchema.statics.isEmailTaken = async function (email) {
-      const _user = await User.find({email:email}).catch(error => console.log(error))
+      const _user = await User.find({email:email})
       return _user.length ? true : false
 };
 
 
 // TODO Implement hashing password with mongoose 
-userSchema.pre('save', function(next){
-  var user = this
-
-  if(!user.isModified('password')) return next()
-
-  bcrypt.genSalt(10,function(err,salt){
-    if(err) return next(err)
-
-    bcrypt.hash(user.password,salt,function(err,hash){
-      if(err) return next(err)
-      user.password = hash
-      next()
-    })
-  })
-})
+// userSchema.pre('save', function(next){
+//   var user = this
+//   if(!user.isModified('password')) return next()
+//   bcrypt.genSalt(10,function(err,salt){
+//     if(err) return next(err)
+//     bcrypt.hash(user.password,salt,function(err,hash){
+//       if(err) return next(err)
+//       user.password = hash
+//       next()
+//     })
+//   })
+// })
 
 userSchema.methods.isPasswordMatch = async function(password){
-  const result = await bcrypt.compare(password,this.password)
-  console.log(result,"[result]")
-  return result
+  console.log(await bcrypt.compare(password,this.password),"[compare]")
+  return bcrypt.compare(password, this.password)
 }
 
 

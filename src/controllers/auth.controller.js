@@ -98,17 +98,10 @@ const login = catchAsync(async (req, res) => {
   
   const result = {
     user : _user,
-    tokens : {
-      access : {
-        token : _token,
-        expires : new Date().getSeconds() * process.env.JWT_ACCESS_EXPIRATION_MINUTES * 60 * 60
-      }
-    }
+    tokens : _token
   }
     
   return res.status(200).json(result)
-  
-  
 });
 
 module.exports = {
