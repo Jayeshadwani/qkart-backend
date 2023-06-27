@@ -64,10 +64,9 @@ describe("Cart routes", () => {
         .set("Authorization", `Bearer ${userTwoAccessToken}`)
         .send();
 
-        console.log(res.body,"[res]")
 
       // TODO: CRIO_TASK_MODULE_TEST - Assert if status code is 400
-      // expect(res.status).toEqual(httpStatus.BAD_REQUEST);
+      expect(res.status).toEqual(httpStatus.BAD_REQUEST);
     });
 
     it("should return 400 if not enough wallet balance", async () => {

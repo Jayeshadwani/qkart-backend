@@ -178,7 +178,8 @@ const checkout = async (user) => {
    throw new ApiError(httpStatus.NOT_FOUND)
   }
 
-  if(!cart.cartItems.length || !user.hasSetNonDefaultAddress()) throw new ApiError(httpStatus.BAD_REQUEST,"No products in cart to checkout")
+
+  if(!cart.cartItems.length || !(await user.hasSetNonDefaultAddress())) throw new ApiError(httpStatus.BAD_REQUEST,"No products in cart to checkout")
   
   const totalAmount = calculateTotal(cart.cartItems)
   
