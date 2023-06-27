@@ -82,7 +82,6 @@ userSchema.statics.isEmailTaken = async function (email) {
 // })
 
 userSchema.methods.isPasswordMatch = async function(password){
-  console.log(await bcrypt.compare(password,this.password),"[compare]")
   return bcrypt.compare(password, this.password)
 }
 
@@ -93,6 +92,30 @@ userSchema.methods.isPasswordMatch = async function(password){
  * Create a Mongoose model out of userSchema and export the model as "User"
  * Note: The model should be accessible in a different module when imported like below
  * const User = require("<user.model file path>").User
+};
+
+/**
+ * Check if entered password matches the user's password
+ * @param {string} password
+ * @returns {Promise<boolean>}
+ */
+
+/**
+ * Check if user have set an address other than the default address
+ * - should return true if user has set an address other than default address
+ * - should return false if user's address is the default address
+ *
+ * @returns {Promise<boolean>}
+ */
+userSchema.methods.hasSetNonDefaultAddress = async function () {
+  const user = this;
+   return user.address === config.default_address;
+};
+
+/*
+ * Create a Mongoose model out of userSchema and export the model as "User"
+ * Note: The model should be accessible in a different module when imported like below
+ * const User = require("<user.model file path>").User;
  */
 /**
  * @typedef User
